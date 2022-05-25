@@ -1,15 +1,22 @@
 import React, { useState } from 'react'
+import { Link, useHistory } from 'react-router-dom';
+import EmployeeService from '../services/EmployeeService';
 
 const AddEmployeeComponent = () => {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [emailId, setEmailId] = useState('');
+    const history = useHistory();
 
     const saveEmployee = (event) => {
         event.preventDefault();
         const employee = { firstName, lastName, emailId }
-        console.log(employee);
+        EmployeeService.createEmployee(employee).then((response) => {
+            history.push("/employees");
+        }).catch(error => {
+            console.log(error);
+        })
     }
 
     return (
@@ -32,7 +39,8 @@ const AddEmployeeComponent = () => {
                                     <label className="form-label">Email Address :</label>
                                     <input type="email" placeholder="enter eamil address" name="emailId" className="form-control" value={emailId} onChange={(event) => setEmailId(event.target.value)}></input>
                                 </div>
-                                <button className="btn btn-success" onClick={(event) => saveEmployee(event)}>Save Empoyee</button>
+                                <button className="btn btn-success" onClick={(event) => saveEmployee(event)}>Save</button>
+                                <Link to="/employees" className="btn btn-danger" style={{ marginLeft: "10px" }}>Cancel</Link>
                             </form>
                         </div>
                     </div>
