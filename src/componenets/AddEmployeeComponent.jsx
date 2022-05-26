@@ -10,14 +10,24 @@ const AddEmployeeComponent = () => {
     const history = useHistory();
     const { id } = useParams();
 
-    const saveEmployee = (event) => {
+    const saveOrUpdateEmployee = (event) => {
         event.preventDefault();
         const employee = { firstName, lastName, emailId }
-        EmployeeService.createEmployee(employee).then((response) => {
-            history.push("/employees");
-        }).catch(error => {
-            console.log(error);
-        })
+        if (id) {
+            EmployeeService.updateEmployee(id, employee).then((response) => {
+                history.push("/employees");
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+        else {
+            EmployeeService.createEmployee(employee).then((response) => {
+                history.push("/employees");
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+
     }
 
     useEffect(() => {
@@ -63,7 +73,7 @@ const AddEmployeeComponent = () => {
                                     <label className="form-label">Email Address :</label>
                                     <input type="email" placeholder="enter eamil address" name="emailId" className="form-control" value={emailId} onChange={(event) => setEmailId(event.target.value)}></input>
                                 </div>
-                                <button className="btn btn-success" onClick={(event) => saveEmployee(event)}>Submit</button>
+                                <button className="btn btn-success" onClick={(event) => saveOrUpdateEmployee(event)}>Submit</button>
                                 <Link to="/employees" className="btn btn-danger" style={{ marginLeft: "10px" }}>Cancel</Link>
                             </form>
                         </div>
