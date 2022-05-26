@@ -30,6 +30,7 @@ const EmployeeListComponent = () => {
                         <th>Employee First Name</th>
                         <th>Employee Last Name</th>
                         <th>Employee Email Address</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,12 +42,15 @@ const EmployeeListComponent = () => {
                                     <td> {employee.firstName} </td>
                                     <td>{employee.lastName}</td>
                                     <td>{employee.emailId}</td>
+                                    <td>
+                                        <Link to={`/update_employee/${employee.id}`} className="btn btn-primary">Edit</Link>
+                                    </td>
                                 </tr>
                         )
                     }
                 </tbody>
             </table>
-        </div>
+        </div >
     )
 }
 

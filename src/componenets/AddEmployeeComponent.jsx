@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link, useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { Link, useHistory, useParams } from 'react-router-dom';
 import EmployeeService from '../services/EmployeeService';
 
 const AddEmployeeComponent = () => {
@@ -8,6 +8,7 @@ const AddEmployeeComponent = () => {
     const [lastName, setLastName] = useState('');
     const [emailId, setEmailId] = useState('');
     const history = useHistory();
+    const { id } = useParams();
 
     const saveEmployee = (event) => {
         event.preventDefault();
@@ -19,12 +20,35 @@ const AddEmployeeComponent = () => {
         })
     }
 
+    useEffect(() => {
+
+        EmployeeService.getEmployeeById(id).then((response) => {
+            setFirstName(response.data.firstName)
+            setLastName(response.data.lastName)
+            setEmailId(response.data.emailId)
+        }).catch(error => {
+            console.log(error)
+        })
+    }, [])
+
+    const pageTitle = () => {
+        if (id) {
+            return <h2 className="text-center">Update employee info</h2>
+        }
+        else {
+            return <h2 className="text-center">Create new employee</h2>
+        }
+    }
+
+
     return (
         <div>
             <div className="container mt-2">
                 <div className="row">
                     <div className="card col-md-6 offset-md-3 offset-md-3">
-                        <h2 className="text-center">Create New Employee</h2>
+                        <h2 className="text-center">
+                            {pageTitle()}
+                        </h2>
                         <div className="card-body">
                             <form>
                                 <div className="form-group mb-2">
@@ -39,7 +63,7 @@ const AddEmployeeComponent = () => {
                                     <label className="form-label">Email Address :</label>
                                     <input type="email" placeholder="enter eamil address" name="emailId" className="form-control" value={emailId} onChange={(event) => setEmailId(event.target.value)}></input>
                                 </div>
-                                <button className="btn btn-success" onClick={(event) => saveEmployee(event)}>Save</button>
+                                <button className="btn btn-success" onClick={(event) => saveEmployee(event)}>Submit</button>
                                 <Link to="/employees" className="btn btn-danger" style={{ marginLeft: "10px" }}>Cancel</Link>
                             </form>
                         </div>
